@@ -1,0 +1,8 @@
+clc; clear; close all;
+data = readmatrix('../data/mnist_train.csv');
+
+h = figure;
+imgs = data(:,2:end);
+
+
+
