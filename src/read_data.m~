@@ -27,14 +27,20 @@ for i = 1:5
 end 
 
 
+[V, D] = eig(A);
+spec = (V.')*img.';
+
+
+
 function my_imshow(A)
     imshow(A/max(max(A)))
 end 
 
 
 
-[V, D] = eig(A);
-v
+
+
+
 
 %%%imshow(squeeze(imgs(1,:,:)))
 
