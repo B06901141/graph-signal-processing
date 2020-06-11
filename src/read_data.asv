@@ -1,8 +1,10 @@
 clc; clear; close all;
 data = readmatrix('../data/mnist_test.csv');
-
+h = figure;
 imgs = data(:,2:end);
 imgs = reshape(imgs, 10000, 784);
+
+cmap = colormap(parula(10));
 
 A = zeros(784, 784);
 
@@ -13,11 +15,8 @@ A(mod(J-I, 784)==1) = 1;
 A(mod(J-I, 784)==28) = 1;
 
 [V, D] = eig(A);
-[freq,ind] = sort(diag(D));
-D = D(ind, ind);
-V = V(:,ind);
+freq = diag(D);
 disp(freq)
-V_ = inv(V);
 
 for label=0:9
     index = (data(:,1) == label);
@@ -41,9 +40,9 @@ for label=0:9
     
     h = figure;
     hold on;
-    for j=1:100
+    for j=1:5
         img = squeeze(labeled_imgs(j,:));
-        spectrum = (V_)*img.';
+        spectrum = (V.')*img.';
         plot(abs(spectrum));
     end
     title(label)
@@ -55,11 +54,8 @@ end
 A(I==J) = 2 - A(I==J);
 
 [V, D] = eig(A);
-[freq,ind] = sort(diag(D));
-D = D(ind, ind);
-V = V(:,ind);
+freq = diag(D);
 disp(freq)
-V_ = inv(V);
 
 for label=0:9
     index = (data(:,1) == label);
@@ -76,21 +72,22 @@ for label=0:9
     end 
     savefig(h,sprintf("laplacian_shift(%d)",label));
 end
-
+%}
+h = figure;
 for label=0:9
     index = (data(:,1) == label);
     labeled_imgs = imgs(index,:);
     
-    h = figure;
+    subplot(10,1,label+1);
     hold on;
-    for j=1:100
+    for j=1:5
         img = squeeze(labeled_imgs(j,:));
-        spectrum = (V_)*img.';
-        plot(abs(spectrum));
+        spectrum = (V.')*img.';
+        plot(abs(spectrum), 'Color', cmap(label,:));
     end
     title(label)
-    savefig(h,sprintf("laplacian_spec(%d)",label));
 end
+savefig(h,sprintf("laplacian_spec"));
 
 function my_imshow(A)
     imshow((A-min(min(A)))/max(max(A)))
