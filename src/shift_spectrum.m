@@ -70,7 +70,6 @@ for label=0:9
         title(sprintf("Spectrum of the Images Labeled %d.",label));
         hold on;
     end
-    title(label)
     savefig(h,sprintf("adjacen_spec(%d)",label));
 end
 
